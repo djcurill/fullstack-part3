@@ -1,2 +1,37 @@
 # Get all notes
 GET http://localhost:3001/api/persons
+
+###
+
+GET http://localhost:3001/api/persons/5
+
+
+###
+
+DELETE http://localhost:3001/api/persons/1
+
+### 
+
+POST http://localhost:3001/api/persons
+content-type: application/json
+
+{
+    "name": "Daniel Curilla",
+    "number": "567-227-6961"
+}
+
+###
+POST http://localhost:3001/api/persons
+content-type: application/json
+
+{
+    "name": "John"
+}
+
+###
+POST http://localhost:3001/api/persons
+content-type: application/json
+
+{
+    "number": "123-456-7891"
+}
