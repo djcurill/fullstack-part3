@@ -4,6 +4,7 @@
   "description": "Simple phonebook app using node js",
   "main": "index.js",
   "scripts": {
+    "build:ui": "rm -rf build/ && cd ../fullstack/part2-communicating-with-server/phonebook && npm run build && cp -r build/ ../../../fullstack-part3/",
     "start": "node ./src/index.js",
     "dev": "nodemon ./src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -24,6 +25,7 @@
   },
   "homepage": "https://github.com/djcurill/fullstack-part3#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.15"
