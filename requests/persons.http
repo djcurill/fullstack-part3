@@ -2,13 +2,16 @@
 GET http://localhost:3001/api/persons
 
 ###
+// Valid get by id
+GET http://localhost:3001/api/persons/619b25910a206eb41cab610a
 
-GET http://localhost:3001/api/persons/5
-
+###
+// Invalid get by id
+GET http://localhost:3001/api/persons/69
 
 ###
 
-DELETE http://localhost:3001/api/persons/1
+DELETE http://localhost:3001/api/persons/619bbdaeb4bf5fa874340189
 
 ### 
 
@@ -16,7 +19,7 @@ POST http://localhost:3001/api/persons
 content-type: application/json
 
 {
-    "name": "Daniel Curilla",
+    "name": "Superman",
     "number": "567-227-6961"
 }
 

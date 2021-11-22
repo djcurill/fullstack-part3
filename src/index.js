@@ -1,11 +1,15 @@
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
-let persons = require('./persons');
+const mongoose = require('mongoose');
+const Person = require('./models/person');
 
+require('dotenv').config();
 const PORT = process.env.PORT || 3001;
 const personsEndpoint = `/api/persons`;
 const infoEndpoint = '/info';
+
+mongoose.connect(process.env.MONGODB_URI);
 
 morgan.token('data', (req, res) => {
   if (req.method === 'POST') return JSON.stringify(req.body);
@@ -20,14 +24,19 @@ app.use(
 );
 
 app.get(personsEndpoint, (req, res) => {
-  res.json(persons);
+  Person.find({}).then((people) => {
+    res.json(people);
+  });
 });
 
 app.get(`${personsEndpoint}/:id`, (req, res) => {
   const id = req.params.id;
-  const person = persons.find((person) => person.id === Number(id));
-  if (person) res.json(person);
-  else res.status(404).end();
+  if (!mongoose.isValidObjectId(id)) return res.status(400).end();
+
+  Person.findById(id).then((person) => {
+    if (person) res.json(person);
+    else res.status(404).end();
+  });
 });
 
 app.get(infoEndpoint, (req, res) => {
@@ -37,26 +46,30 @@ app.get(infoEndpoint, (req, res) => {
 });
 
 app.delete(`${personsEndpoint}/:id`, (req, res) => {
-  const id = Number(req.params.id);
-  persons = persons.filter((person) => person.id !== id);
-  res.status(204).end();
+  const id = req.params.id;
+  if (!mongoose.isValidObjectId(id))
+    return res.status(400).json({ error: 'invalid id type' });
+
+  Person.findByIdAndDelete(id).then((result) => {
+    if (result === null) return res.status(204).end();
+    return res.status(204).end();
+  });
 });
 
 app.post(personsEndpoint, (req, res) => {
   const newPerson = req.body;
 
   if (!newPerson.number || !newPerson.name) {
-    console.log('one');
     return res.status(400).json({ error: 'Missing name and/or number fields' });
   }
 
   if (persons.some((person) => person.name === newPerson.name)) {
     return res.status(400).json({ error: 'name must be unique' });
   }
-  console.log('two');
-  newPerson.id = Math.floor(Math.random() * 5000);
-  persons = persons.concat(newPerson);
-  res.status(201).json(newPerson);
+
+  Person.create(newPerson).then((createdPerson) => {
+    return res.status(201).json(createdPerson);
+  });
 });
 
 app.listen(PORT, () => {
