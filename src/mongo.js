@@ -5,7 +5,8 @@ const Person = require('./models/person');
 
 mongoose.connect(process.env.MONGODB_URI).catch((err) => console.log(err));
 
-const argv = require('yargs/yargs')(hideBin(process.argv)).usage(
+// eslint-disable-next-line import/order
+const { argv } = require('yargs/yargs')(hideBin(process.argv)).usage(
   '$0 [name] [number]',
   'PhoneNumber database cli for adding and retrieving contacts',
   (yargs) => {
@@ -16,7 +17,7 @@ const argv = require('yargs/yargs')(hideBin(process.argv)).usage(
         type: 'string',
       });
   }
-).argv;
+);
 
 if (argv.name && argv.number) {
   // Add new number
@@ -34,8 +35,9 @@ if (argv.name && argv.number) {
   Person.find({}).then((result) => {
     console.log('Phonebook:');
 
+    // eslint-disable-next-line array-callback-return
     result.map((person) => {
-      console.log(person.name + ' ' + person.number);
+      console.log(`${person.name} ${person.number}`);
     });
 
     mongoose.connection.close();

@@ -7,9 +7,8 @@ const badIdHandler = require('./middleware/error');
 
 console.log(badIdHandler);
 
-require('dotenv').config();
 const PORT = process.env.PORT || 3001;
-const personsEndpoint = `/api/persons`;
+const personsEndpoint = '/api/persons';
 const infoEndpoint = '/info';
 
 mongoose.connect(process.env.MONGODB_URI);
@@ -68,14 +67,12 @@ app.post(personsEndpoint, (req, res, next) => {
   }
 
   Person.create(newPerson)
-    .then((createdPerson) => {
-      return res.status(201).json(createdPerson);
-    })
+    .then((createdPerson) => res.status(201).json(createdPerson))
     .catch((err) => next(err));
 });
 
 app.put(`${personsEndpoint}/:id`, (req, res, next) => {
-  const id = req.params.id;
+  const { id } = req.params;
   const update = req.body;
 
   Person.findByIdAndUpdate(id, update, { new: true, runValidators: true })
