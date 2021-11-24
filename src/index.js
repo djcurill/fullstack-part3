@@ -78,7 +78,7 @@ app.put(`${personsEndpoint}/:id`, (req, res, next) => {
   const id = req.params.id;
   const update = req.body;
 
-  Person.findByIdAndUpdate(id, update, { new: true })
+  Person.findByIdAndUpdate(id, update, { new: true, runValidators: true })
     .then((result) => {
       res.status(201).json(result);
     })
