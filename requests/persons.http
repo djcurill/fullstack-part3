@@ -11,7 +11,7 @@ GET http://localhost:3001/api/persons/69
 
 ###
 
-DELETE http://localhost:3001/api/persons/619bbdaeb4bf5fa874340189
+DELETE http://localhost:3001/api/persons/619d8b367470d16a26e899fa
 
 ### 
 
@@ -37,4 +37,14 @@ content-type: application/json
 
 {
     "number": "123-456-7891"
+}
+
+###
+// Invalid post request, name is too short
+POST http://localhost:3001/api/persons
+content-type: application/json
+
+{
+    "name": "Su",
+    "number": "567-227-6961"
 }

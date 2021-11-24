@@ -60,20 +60,18 @@ app.delete(`${personsEndpoint}/:id`, (req, res, next) => {
     .catch((err) => next(err));
 });
 
-app.post(personsEndpoint, (req, res) => {
+app.post(personsEndpoint, (req, res, next) => {
   const newPerson = req.body;
 
   if (!newPerson.number || !newPerson.name) {
     return res.status(400).json({ error: 'Missing name and/or number fields' });
   }
 
-  if (persons.some((person) => person.name === newPerson.name)) {
-    return res.status(400).json({ error: 'name must be unique' });
-  }
-
-  Person.create(newPerson).then((createdPerson) => {
-    return res.status(201).json(createdPerson);
-  });
+  Person.create(newPerson)
+    .then((createdPerson) => {
+      return res.status(201).json(createdPerson);
+    })
+    .catch((err) => next(err));
 });
 
 app.put(`${personsEndpoint}/:id`, (req, res, next) => {
